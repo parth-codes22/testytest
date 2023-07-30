@@ -349,8 +349,8 @@ function updateChartData() {
     dataPoints.push({ x: timestamp, y: newValue });
 
     // Update the chart with the new data points for each dataset
-    chart.data.datasets[0].data = dataPoints;
-    chart.update();
+    chart2.data.datasets[0].data = dataPoints;
+    chart2.update();
 
     // Call the function again after 100ms
     setTimeout(updateChartData, 100);
@@ -358,7 +358,7 @@ function updateChartData() {
 
 // Set up the chart
 const ctx2 = document.getElementById('liveChartSpeed').getContext('2d');
-const chart = new Chart(ctx2, {
+const chart2 = new Chart(ctx2, {
     type: 'line',
     data: {
         datasets: [
