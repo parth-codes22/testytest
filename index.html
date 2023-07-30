@@ -20,18 +20,12 @@
 <body>
 <main role="main" class="container">
 
-<h1 align="left">JavaScript Sensor Access Demo</h1>
-<p><b>This demo page should be run from a mobile phone or a tablet.</b></p>
-<p>This demo page shows how websites can access sensor data from mobile devices using <a href="https://developer.mozilla.org/en-US/docs/Web/Events/deviceorientation"><i>deviceorientation</i></a> and <a href="https://developer.mozilla.org/en-US/docs/Web/Events/devicemotion"><i>devicemotion</i></a> events.</p>
-
-<p><i>deviceorientation</i> provides <i>alpha</i>, <i>beta</i> and <i>gamma</i> components which correspond to orientation along the Z, X and Y axes, respectively.</p><p><i>devicemotion</i> provides acceleration and rotation rate along three axes using MEMS accelerometers and gyroscopes.</p>
-
-<p>The sensor data shown below does not leave your browser: it is not collected, shared or transmitted. However this may not be true for other websites that you visit. For more information, see the companion page for our study: <a href="sensor-js.html">"The Web's Sixth Sense: A Study of Scripts Accessing Smartphone Sensors"</a>.</p>
-
+<h1 align="left">JavaScript Sensor Data Test</h1>
+  
 <div class="p-3 mb-2 bg-secondary" id="demo-div">
 <a id="start_demo" class="btn btn-lg btn-success py-1" href="#" role="button">Start the demo</a>
-<p style="margin-top:1rem;">Num. of datapoints: <span class="badge badge-warning" id="num-observed-events">0</span></p>
 
+<p style="margin-top:1rem;">Num. of datapoints: <span class="badge badge-warning" id="num-observed-events">0</span></p>
 
 <h4 style="margin-top:0.75rem;">Orientation</h4>
 <ul>
@@ -49,7 +43,6 @@
 </ul>
 
 <h4>Accelerometer including gravity</h4>
-
 <ul>
   <li>X-axis: <span id="Accelerometer_gx">0</span><span> m/s<sup>2</sup></span></li>
   <li>Y-axis: <span id="Accelerometer_gy">0</span><span> m/s<sup>2</sup></span></li>
@@ -66,22 +59,24 @@
 </div>
 </main>
 
-<div style="width: 800px;">
+<div style="width: 600px;">
     <canvas id="liveChart"></canvas>
 </div>
 
-<footer class="footer">
-  <div class="container">
-    <span class="text-muted small">This page is hosted on GitHub Pages, please see GitHub's privacy statement
-    <a href="https://help.github.com/articles/github-privacy-statement/">here</a>.</span>
-  </div>
+<footer style="text-align: center; padding: 20px;">
+        <span>Parth Kapse</span>
 </footer>
+
 <script>
 
-let alpha = 0;
+let X = 0;
+let Y = 0;
+let Z = 0;
+let Xg = 0;
+let Yg = 0;
+let Zg = 0;
 function handleOrientation(event) {
   updateFieldIfNotNull('Orientation_a', event.alpha);
-  alpha = event.alpha;
   updateFieldIfNotNull('Orientation_b', event.beta);
   updateFieldIfNotNull('Orientation_g', event.gamma);
   incrementEventCount();
@@ -100,12 +95,18 @@ function updateFieldIfNotNull(fieldName, value, precision=10){
 
 function handleMotion(event) {
   updateFieldIfNotNull('Accelerometer_gx', event.accelerationIncludingGravity.x);
+  Xg = event.accelerationIncludingGravity.x;
   updateFieldIfNotNull('Accelerometer_gy', event.accelerationIncludingGravity.y);
+  Yg = event.accelerationIncludingGravity.y;
   updateFieldIfNotNull('Accelerometer_gz', event.accelerationIncludingGravity.z);
+  Zg = event.accelerationIncludingGravity.z;
 
   updateFieldIfNotNull('Accelerometer_x', event.acceleration.x);
+  X = event.acceleration.x;
   updateFieldIfNotNull('Accelerometer_y', event.acceleration.y);
+  Y = event.acceleration.y;
   updateFieldIfNotNull('Accelerometer_z', event.acceleration.z);
+  Z = event.acceleration.z;
 
   updateFieldIfNotNull('Accelerometer_i', event.interval, 2);
 
@@ -146,25 +147,45 @@ demo_button.onclick = function(e) {
 };
 
 // Initialize an empty array to hold the data points
-let dataPoints = [];
+let dataPointsX = [];
+let dataPointsY = [];
+let dataPointsZ = [];
+let dataPointsXg = [];
+let dataPointsYg = [];
+let dataPointsZg = [];
 
 let temp = 0;
 
 // Function to get the updated variable value every 100ms and update the chart
 function updateChartData() {
     // Replace this with the actual function to get the updated variable value
-    const newValue = alpha; // Replace this with your actual data source
-
+    const newValueX = X;
+    const newValueY = Y;
+    const newValueZ = Z;
+    const newValueXg = Xg;
+    const newValueYg = Yg;
+    const newValueZg = Zg;
+  
     // Get the current timestamp (X-axis value)
     const timestamp = temp;
 
     temp = temp + 10;
 
     // Add the new data point to the array
-    dataPoints.push({ x: timestamp, y: newValue });
-
+    dataPointsX.push({ x: timestamp, y: newValueX });
+    dataPointsY.push({ x: timestamp, y: newValueY });
+    dataPointsZ.push({ x: timestamp, y: newValueZ });
+    dataPointsXg.push({ x: timestamp, y: newValueXg });
+    dataPointsYg.push({ x: timestamp, y: newValueYg });
+    dataPointsZg.push({ x: timestamp, y: newValueZg });
+    
     // Update the chart
-    chart.data.datasets[0].data = dataPoints;
+    chart.data.datasets[0].data = dataPointsX;
+    chart.data.datasets[1].data = dataPointsY;
+    chart.data.datasets[2].data = dataPointsZ;
+    chart.data.datasets[3].data = dataPointsXg;
+    chart.data.datasets[4].data = dataPointsYg;
+    chart.data.datasets[5].data = dataPointsZg;
     chart.update();
 
     // Call the function again after 100ms
@@ -176,13 +197,29 @@ const ctx = document.getElementById('liveChart').getContext('2d');
 const chart = new Chart(ctx, {
     type: 'line',
     data: {
-        datasets: [{
-            label: 'Live Data',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            data: dataPoints,
-            fill: true,
-        }]
+        datasets: [
+            {
+                label: 'Variable 1',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                data: dataPoints1,
+                fill: true,
+            },
+            {
+                label: 'Variable 2',
+                borderColor: 'rgba(192, 75, 192, 1)',
+                backgroundColor: 'rgba(192, 75, 192, 0.2)',
+                data: dataPoints2,
+                fill: true,
+            },
+            {
+                label: 'Variable 3',
+                borderColor: 'rgba(192, 192, 75, 1)',
+                backgroundColor: 'rgba(192, 192, 75, 0.2)',
+                data: dataPoints3,
+                fill: true,
+            },
+        ]
     },
     options: {
         scales: {
@@ -203,16 +240,16 @@ const chart = new Chart(ctx, {
                 display: true,
             },
             zoom: {
-              zoom: {
-                  wheel: {
-                      enabled: true, // Enable zooming using the mouse wheel
-                  },
-                  pinch: {
-                      enabled: true, // Enable zooming using pinch gestures on touchscreens
-                  },
-                  mode: 'xy', // Zoom in both X and Y directions
-              }
-          }
+                zoom: {
+                    wheel: {
+                        enabled: true, // Enable zooming using the mouse wheel
+                    },
+                    pinch: {
+                        enabled: true, // Enable zooming using pinch gestures on touchscreens
+                    },
+                    mode: 'x', // Zoom in both X and Y directions
+                }
+            }
         }
     }
 });
