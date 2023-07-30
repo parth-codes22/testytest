@@ -14,6 +14,7 @@
       #demo-div li {line-height: 21px;}
       #demo-div ul {margin-bottom: 0.66rem;}
     </style>
+     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 <main role="main" class="container">
@@ -63,6 +64,11 @@
 
 </div>
 </main>
+
+<div style="width: 600px;">
+    <canvas id="liveChart"></canvas>
+</div>
+
 <footer class="footer">
   <div class="container">
     <span class="text-muted small">This page is hosted on GitHub Pages, please see GitHub's privacy statement
@@ -136,6 +142,59 @@ demo_button.onclick = function(e) {
   }
 };
 
+    // Initialize the chart with an empty dataset
+    const ctx = document.getElementById('liveChart').getContext('2d');
+    const liveChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Live Data',
+          borderColor: 'rgb(75, 192, 192)',
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          data: [],
+          fill: true,
+        }]
+      },
+      options: {
+        scales: {
+          x: {
+            display: false
+          },
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    // Function to update the chart data
+    function updateChartData() {
+      // Fetch the current value of the variable (replace this with your own method)
+      const currentValue = event.alpha; // Example: Generate random data between 0 and 100
+
+      // Add the current value to the chart dataset
+      const time = new Date().toLocaleTimeString();
+      liveChart.data.labels.push(time);
+      liveChart.data.datasets[0].data.push(currentValue);
+
+      // Limit the number of data points displayed (e.g., keep the last 50 points)
+      const maxDataPoints = 50;
+      if (liveChart.data.labels.length > maxDataPoints) {
+        liveChart.data.labels.shift();
+        liveChart.data.datasets[0].data.shift();
+      }
+
+      // Update the chart
+      liveChart.update();
+
+      // Call the function again after 100ms
+      setTimeout(updateChartData, 100);
+    }
+
+    // Start updating the chart data
+    updateChartData();
+  
 /*
 Light and proximity are not supported anymore by mainstream browsers.
 window.addEventListener('devicelight', function(e) {
