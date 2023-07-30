@@ -346,7 +346,7 @@ function updateChartData() {
     temp1 = temp1 + 10;
 
     // Add the new data points to the arrays for each variable
-    dataPoints.push({ x: timestamp, y: newValue });
+    dataPointsS.push({ x: timestamp, y: newValue });
 
     // Update the chart with the new data points for each dataset
     chart2.data.datasets[0].data = dataPoints;
