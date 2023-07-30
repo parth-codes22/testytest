@@ -63,8 +63,12 @@
     <canvas id="liveChart"></canvas>
 </div>
 
-<h1>Device Speed</h1>
-<p>Speed: <span id="speed">-</span> m/s</p>
+  <h1>Device Speed</h1>
+  <p>Speed: <span id="speed">-</span> m/s</p>
+
+  <div style="width: 800px; margin: 0 auto;">
+    <canvas id="liveChartSpeed"></canvas>
+  </div>
 
 <script>
   function showSpeed(position) {
@@ -91,12 +95,83 @@
     const speedElement = document.getElementById('speed');
     speedElement.textContent = 'Geolocation is not supported in this browser.';
   }
-</script>
-  
-<footer style="text-align: center; padding: 20px;">
-        <span>Parth Kapse</span>
-</footer>
+// Initialize empty arrays to hold the data points for each variable
+let dataPointsS = [];
 
+let temp1 = 0;
+
+// Function to get the updated variable values every 100ms and update the chart
+function updateChartData() {
+    // Replace these with the actual functions to get the updated variable values
+    const newValue = Math.random() * 360; // Replace this with your actual data source for Speed
+
+    // Get the current timestamp (X-axis value)
+    const timestamp = temp1;
+
+    temp1 = temp1 + 10;
+
+    // Add the new data points to the arrays for each variable
+    dataPoints.push({ x: timestamp, y: newValue });
+
+    // Update the chart with the new data points for each dataset
+    chart.data.datasets[0].data = dataPoints;
+    chart.update();
+
+    // Call the function again after 100ms
+    setTimeout(updateChartData, 100);
+}
+
+// Set up the chart
+const ctx = document.getElementById('liveChartSpeed').getContext('2d');
+const chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        datasets: [
+            {
+                label: 'Variable 1',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                data: dataPoints1,
+                fill: true,
+            }
+        ]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom'
+            },
+            y: {
+                beginAtZero: true,
+                suggestedMax: 360,
+            }
+        },
+        animation: {
+            duration: 0 // Disable animation for smoother updating
+        },
+        plugins: {
+            legend: {
+                display: true,
+            },
+            zoom: {
+                zoom: {
+                    wheel: {
+                        enabled: true, // Enable zooming using the mouse wheel
+                    },
+                    pinch: {
+                        enabled: true, // Enable zooming using pinch gestures on touchscreens
+                    },
+                    mode: 'x', // Zoom in both X and Y directions
+                }
+            }
+        }
+    }
+});
+
+// Start updating the chart
+updateChartData();
+</script>
 <script>
 
 let X = 0;
