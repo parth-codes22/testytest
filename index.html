@@ -63,6 +63,36 @@
     <canvas id="liveChart"></canvas>
 </div>
 
+<h1>Device Speed</h1>
+<p>Speed: <span id="speed">-</span> m/s</p>
+
+<script>
+  function showSpeed(position) {
+    const speedElement = document.getElementById('speed');
+
+    if (position.coords.speed !== null) {
+      // Display speed if available
+      speedElement.textContent = position.coords.speed.toFixed(2) + ' m/s';
+    } else {
+      // Speed information not available
+      speedElement.textContent = 'Speed information not available';
+    }
+  }
+
+  function showError(error) {
+    const speedElement = document.getElementById('speed');
+    speedElement.textContent = 'Error occurred: ' + error.message;
+  }
+
+  // Check if Geolocation is supported in the browser
+  if ('geolocation' in navigator) {
+    navigator.geolocation.watchPosition(showSpeed, showError, { enableHighAccuracy: true });
+  } else {
+    const speedElement = document.getElementById('speed');
+    speedElement.textContent = 'Geolocation is not supported in this browser.';
+  }
+</script>
+  
 <footer style="text-align: center; padding: 20px;">
         <span>Parth Kapse</span>
 </footer>
