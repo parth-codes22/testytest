@@ -349,7 +349,7 @@ function updateChartData() {
     dataPointsS.push({ x: timestamp, y: newValue });
 
     // Update the chart with the new data points for each dataset
-    chart2.data.datasets[0].data = dataPoints;
+    chart2.data.datasets[0].data = dataPointsS;
     chart2.update();
 
     // Call the function again after 100ms
