@@ -77,8 +77,10 @@
 </footer>
 <script>
 
+let alpha = 0;
 function handleOrientation(event) {
   updateFieldIfNotNull('Orientation_a', event.alpha);
+  alpha = event.alpha;
   updateFieldIfNotNull('Orientation_b', event.beta);
   updateFieldIfNotNull('Orientation_g', event.gamma);
   incrementEventCount();
@@ -171,7 +173,7 @@ demo_button.onclick = function(e) {
     // Function to update the chart data
     function updateChartData() {
       // Fetch the current value of the variable (replace this with your own method)
-      const currentValue = event.alpha; // Example: Generate random data between 0 and 100
+      const currentValue = alpha; // Example: Generate random data between 0 and 100
 
       // Add the current value to the chart dataset
       const time = new Date().toLocaleTimeString();
