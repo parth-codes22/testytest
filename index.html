@@ -65,7 +65,7 @@
 </div>
 </main>
 
-<div style="width: 600px;">
+<div style="width: 800px;">
     <canvas id="liveChart"></canvas>
 </div>
 
@@ -144,58 +144,80 @@ demo_button.onclick = function(e) {
   }
 };
 
-    // Initialize the chart with an empty dataset
-    const ctx = document.getElementById('liveChart').getContext('2d');
-    const liveChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: [],
+// Initialize an empty array to hold the data points
+let dataPoints = [];
+
+let temp = 0;
+
+// Function to get the updated variable value every 100ms and update the chart
+function updateChartData() {
+    // Replace this with the actual function to get the updated variable value
+    const newValue = Math.random() * 360; // Replace this with your actual data source
+
+    // Get the current timestamp (X-axis value)
+    const timestamp = temp;
+
+    temp = temp + 10;
+
+    // Add the new data point to the array
+    dataPoints.push({ x: timestamp, y: newValue });
+
+    // Update the chart
+    chart.data.datasets[0].data = dataPoints;
+    chart.update();
+
+    // Call the function again after 100ms
+    setTimeout(updateChartData, 100);
+}
+
+// Set up the chart
+const ctx = document.getElementById('liveChart').getContext('2d');
+const chart = new Chart(ctx, {
+    type: 'line',
+    data: {
         datasets: [{
-          label: 'Live Data',
-          borderColor: 'rgb(75, 192, 192)',
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          data: [],
-          fill: true,
+            label: 'Live Data',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            data: dataPoints,
+            fill: true,
         }]
-      },
-      options: {
+    },
+    options: {
         scales: {
-          x: {
-            display: false
-          },
-          y: {
-            beginAtZero: true
+            x: {
+                type: 'linear',
+                position: 'bottom'
+            },
+            y: {
+                beginAtZero: true,
+                suggestedMax: 360,
+            }
+        },
+        animation: {
+            duration: 0 // Disable animation for smoother updating
+        },
+        plugins: {
+            legend: {
+                display: true,
+            },
+            zoom: {
+              zoom: {
+                  wheel: {
+                      enabled: true, // Enable zooming using the mouse wheel
+                  },
+                  pinch: {
+                      enabled: true, // Enable zooming using pinch gestures on touchscreens
+                  },
+                  mode: 'xy', // Zoom in both X and Y directions
+              }
           }
         }
-      }
-    });
-
-    // Function to update the chart data
-    function updateChartData() {
-      // Fetch the current value of the variable (replace this with your own method)
-      const currentValue = alpha; // Example: Generate random data between 0 and 100
-
-      // Add the current value to the chart dataset
-      const time = new Date().toLocaleTimeString();
-      liveChart.data.labels.push(time);
-      liveChart.data.datasets[0].data.push(currentValue);
-
-      // Limit the number of data points displayed (e.g., keep the last 50 points)
-      const maxDataPoints = 50;
-      if (liveChart.data.labels.length > maxDataPoints) {
-        liveChart.data.labels.shift();
-        liveChart.data.datasets[0].data.shift();
-      }
-
-      // Update the chart
-      liveChart.update();
-
-      // Call the function again after 100ms
-      setTimeout(updateChartData, 100);
     }
+});
 
-    // Start updating the chart data
-    updateChartData();
+// Start updating the chart
+updateChartData();
   
 /*
 Light and proximity are not supported anymore by mainstream browsers.
