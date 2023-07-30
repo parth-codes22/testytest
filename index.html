@@ -333,79 +333,79 @@ window.addEventListener('userproximity', function(event) {
 // Initialize empty arrays to hold the data points for each variable
 let dataPointsS = [];
 
-let temp1 = 0;
+      let temp1 = 0;
 
-// Function to get the updated variable values every 100ms and update the chart
-function updateChartData2() {
-    // Replace these with the actual functions to get the updated variable values
-    const newValue = speed; // Replace this with your actual data source for Speed
+      // Function to get the updated variable values every 100ms and update the chart
+      function updateChartData2() {
+          // Replace these with the actual functions to get the updated variable values
+          const newValue = Math.random() * 360; // Replace this with your actual data source for Speed
 
-    // Get the current timestamp (X-axis value)
-    const timestamp1 = temp1;
+          // Get the current timestamp (X-axis value)
+          const timestamp1 = temp1;
 
-    temp1 = temp1 + 10;
+          temp1 = temp1 + 10;
 
-    // Add the new data points to the arrays for each variable
-    dataPointsS.push({ x: timestamp1, y: newValue });
+          // Add the new data points to the arrays for each variable
+          dataPointsS.push({ x: timestamp1, y: newValue });
 
-    // Update the chart with the new data points for each dataset
-    chart2.data.datasets[0].data = dataPointsS;
-    chart2.update();
+          // Update the chart with the new data points for each dataset
+          chart2.data.datasets[0].data = dataPointsS;
+          chart2.update();
 
-    // Call the function again after 100ms
-    setTimeout(updateChartData2, 100);
-}
+          // Call the function again after 100ms
+          setTimeout(updateChartData2, 100);
+      }
 
-// Set up the chart
-const ctx2 = document.getElementById('liveChartSpeed').getContext('2d');
-const chart2 = new Chart(ctx2, {
-    type: 'line',
-    data: {
-        datasets: [
-            {
-                label: 'Variable 1',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                data: dataPointsS,
-                fill: true,
-            }
-        ]
-    },
-    options: {
-        scales: {
-            x: {
-                type: 'linear',
-                position: 'bottom'
-            },
-            y: {
-                beginAtZero: true,
-                suggestedMax: 360,
-            }
-        },
-        animation: {
-            duration: 0 // Disable animation for smoother updating
-        },
-        plugins: {
-            legend: {
-                display: true,
-            },
-            zoom: {
-                zoom: {
-                    wheel: {
-                        enabled: true, // Enable zooming using the mouse wheel
-                    },
-                    pinch: {
-                        enabled: true, // Enable zooming using pinch gestures on touchscreens
-                    },
-                    mode: 'x', // Zoom in both X and Y directions
-                }
-            }
-        }
-    }
-});
+      // Set up the chart
+      const ctx2 = document.getElementById('liveChartSpeed').getContext('2d');
+      const chart2 = new Chart(ctx2, {
+          type: 'line',
+          data: {
+              datasets: [
+                  {
+                      label: 'Variable 1',
+                      borderColor: 'rgba(75, 192, 192, 1)',
+                      backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                      data: dataPointsS,
+                      fill: true,
+                  }
+              ]
+          },
+          options: {
+              scales: {
+                  x: {
+                      type: 'linear',
+                      position: 'bottom'
+                  },
+                  y: {
+                      beginAtZero: true,
+                      suggestedMax: 360,
+                  }
+              },
+              animation: {
+                  duration: 0 // Disable animation for smoother updating
+              },
+              plugins: {
+                  legend: {
+                      display: true,
+                  },
+                  zoom: {
+                      zoom: {
+                          wheel: {
+                              enabled: true, // Enable zooming using the mouse wheel
+                          },
+                          pinch: {
+                              enabled: true, // Enable zooming using pinch gestures on touchscreens
+                          },
+                          mode: 'x', // Zoom in both X and Y directions
+                      }
+                  }
+              }
+          }
+      });
 
-// Start updating the chart
-updateChartData2();
+      // Start updating the chart
+      updateChartData2();
 </script>
 </body>
 </html>
