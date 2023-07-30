@@ -336,24 +336,24 @@ let dataPointsS = [];
 let temp1 = 0;
 
 // Function to get the updated variable values every 100ms and update the chart
-function updateChartData() {
+function updateChartData2() {
     // Replace these with the actual functions to get the updated variable values
     const newValue = speed; // Replace this with your actual data source for Speed
 
     // Get the current timestamp (X-axis value)
-    const timestamp = temp1;
+    const timestamp1 = temp1;
 
     temp1 = temp1 + 10;
 
     // Add the new data points to the arrays for each variable
-    dataPointsS.push({ x: timestamp, y: newValue });
+    dataPointsS.push({ x: timestamp1, y: newValue });
 
     // Update the chart with the new data points for each dataset
     chart2.data.datasets[0].data = dataPointsS;
     chart2.update();
 
     // Call the function again after 100ms
-    setTimeout(updateChartData, 100);
+    setTimeout(updateChartData2, 100);
 }
 
 // Set up the chart
@@ -405,7 +405,7 @@ const chart2 = new Chart(ctx2, {
 });
 
 // Start updating the chart
-updateChartData();
+updateChartData2();
 </script>
 </body>
 </html>
